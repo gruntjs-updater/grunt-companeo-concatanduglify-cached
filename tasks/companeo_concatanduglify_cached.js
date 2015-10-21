@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                     } else {
                         bufferOption = {};
                     }
-                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', options);
+                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', bufferOption);
                     grunt.file.write(file.dest + '.min.js', res.code);
                 } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
