@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                 grunt.file.write(file.dest + '.js', src);
 
                 if (!options.no_compress) {
-                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
+                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', options);
                     grunt.file.write(file.dest + '.min.js', res.code);
                 } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
