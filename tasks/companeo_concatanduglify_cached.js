@@ -24,13 +24,12 @@ module.exports = function (grunt) {
                 no_compress: true
             }),
             res;
-        grunt.log.writeln('options : ' + JSON.stringify(options));
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
             // Concat specified files
-
-            var src = file.orig.src.filter(function (filepath) {
+            var bufferOption,
+                src = file.orig.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set)
                 if (!grunt.file.exists(filepath)) {
                     grunt.fail.warn('Source file "' + filepath + '" not found.');
@@ -47,6 +46,13 @@ module.exports = function (grunt) {
                 grunt.file.write(file.dest + '.js', src);
 
                 if (!options.no_compress) {
+                    if (true == options.sourceMap) {
+                        bufferOption = {
+                            outSourceMap : file.dest + '.min.js.map'
+                        }
+                    } else {
+                        bufferOption = {};
+                    }
                     res = uglify.minify(file.dest + '.js', file.dest + '.min.js', options);
                     grunt.file.write(file.dest + '.min.js', res.code);
                 } else {
