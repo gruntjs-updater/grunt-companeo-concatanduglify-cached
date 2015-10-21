@@ -23,13 +23,13 @@ module.exports = function (grunt) {
                 separator  : ';',
                 no_compress: true
             }),
+            bufferOption,
             res;
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
             // Concat specified files
-            var bufferOption,
-                src = file.orig.src.filter(function (filepath) {
+            var src = file.orig.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set)
                 if (!grunt.file.exists(filepath)) {
                     grunt.fail.warn('Source file "' + filepath + '" not found.');
@@ -60,6 +60,7 @@ module.exports = function (grunt) {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                 }
                 if (true == options.sourceMap) {
+                    grunt.log.writeln('creation map ', file.dest);
                     grunt.file.write(file.dest + '.min.js.map', res.map);
                 }
             }
