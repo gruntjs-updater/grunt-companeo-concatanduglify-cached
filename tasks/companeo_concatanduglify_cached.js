@@ -42,7 +42,7 @@ module.exports = function (grunt) {
             }).join(grunt.util.normalizelf(options.separator));
 
             if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
-                grunt.log.writeln('creation', file.dest);
+                grunt.log.writeln('creation ', file.dest);
                 grunt.file.write(file.dest + '.js', src);
 
                 if (true == options.sourceMap) {
@@ -53,15 +53,15 @@ module.exports = function (grunt) {
                     bufferOption = {};
                 }
 
-                res = uglify.minify(file.dest + '.js', file.dest + '.min.js', bufferOption);
                 if (!options.no_compress) {
+                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', bufferOption);
                     grunt.file.write(file.dest + '.min.js', res.code);
+                    if (true == options.sourceMap) {
+                        grunt.log.writeln('creation map ', file.dest);
+                        grunt.file.write(file.dest + '.min.js.map', res.map);
+                    }
                 } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
-                }
-                if (true == options.sourceMap) {
-                    grunt.log.writeln('creation map ', file.dest);
-                    grunt.file.write(file.dest + '.min.js.map', res.map);
                 }
             }
         });
