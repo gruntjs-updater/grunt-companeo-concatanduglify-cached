@@ -45,21 +45,22 @@ module.exports = function (grunt) {
                 grunt.log.writeln('creation', file.dest);
                 grunt.file.write(file.dest + '.js', src);
 
-                if (!options.no_compress) {
-                    if (true == options.sourceMap) {
-                        bufferOption = {
-                            outSourceMap : file.dest + '.min.js.map'
-                        }
-                    } else {
-                        bufferOption = {};
-                    }
-                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', bufferOption);
-                    grunt.file.write(file.dest + '.min.js', res.code);
-                    if (true == options.sourceMap) {
-                        grunt.file.write(file.dest + '.min.js.map', res.map);
+                if (true == options.sourceMap) {
+                    bufferOption = {
+                        outSourceMap : file.dest + '.min.js.map'
                     }
                 } else {
+                    bufferOption = {};
+                }
+
+                res = uglify.minify(file.dest + '.js', file.dest + '.min.js', bufferOption);
+                if (!options.no_compress) {
+                    grunt.file.write(file.dest + '.min.js', res.code);
+                } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
+                }
+                if (true == options.sourceMap) {
+                    grunt.file.write(file.dest + '.min.js.map', res.map);
                 }
             }
         });
