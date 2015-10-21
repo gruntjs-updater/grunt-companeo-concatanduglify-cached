@@ -23,12 +23,12 @@ module.exports = function (grunt) {
                 separator  : ';',
                 no_compress: true
             }),
-            bufferOption,
             res;
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
             // Concat specified files
+
             var src = file.orig.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set)
                 if (!grunt.file.exists(filepath)) {
@@ -42,24 +42,12 @@ module.exports = function (grunt) {
             }).join(grunt.util.normalizelf(options.separator));
 
             if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
-                grunt.log.writeln('creation ', file.dest);
+                grunt.log.writeln('creation', file.dest);
                 grunt.file.write(file.dest + '.js', src);
 
-                if (true == options.sourceMap) {
-                    bufferOption = {
-                        outSourceMap : file.dest + '.min.js.map'
-                    }
-                } else {
-                    bufferOption = {};
-                }
-
                 if (!options.no_compress) {
-                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', bufferOption);
+                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
                     grunt.file.write(file.dest + '.min.js', res.code);
-                    if (true == options.sourceMap) {
-                        grunt.log.writeln('creation map ', file.dest);
-                        grunt.file.write(file.dest + '.min.js.map', res.map);
-                    }
                 } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                 }
