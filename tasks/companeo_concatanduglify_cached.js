@@ -24,6 +24,7 @@ module.exports = function (grunt) {
                 no_compress: true
             }),
             res;
+        grunt.log.writeln('options : ' + JSON.stringify(options));
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
