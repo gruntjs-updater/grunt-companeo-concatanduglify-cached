@@ -26,6 +26,8 @@ module.exports = function (grunt) {
             }),
             res;
 
+        grunt.log.writeln('Options used : ', JSON.stringify(options, null, 2));
+
         if (options.ultraVerbose) {
             grunt.log.writeln('All files concerned', JSON.stringify(this.files));
         }
@@ -59,6 +61,8 @@ module.exports = function (grunt) {
                 } else {
                     grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                 }
+            } else {
+                grunt.log.writeln('rejet', file.dest);
             }
         });
     });
