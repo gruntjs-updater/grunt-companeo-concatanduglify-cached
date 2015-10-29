@@ -11,8 +11,8 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var uglify = require('uglify-js');
-    var chalk = require('chalk');
+    var uglify = require('uglify-js'),
+        chalk = require('chalk');
 
     // Please see the Grunt documentation for more information regarding task
     // creation: http://gruntjs.com/creating-tasks
@@ -21,9 +21,14 @@ module.exports = function (grunt) {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
                 separator  : ';',
-                no_compress: true
+                no_compress: true,
+                ultraVerbose : false
             }),
             res;
+
+        if (options.ultraVerbose) {
+            grunt.log.writeln('All files concerned', JSON.stringify(this.files));
+        }
 
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
@@ -31,6 +36,9 @@ module.exports = function (grunt) {
 
             var src = file.orig.src.filter(function (filepath) {
                 // Warn on and remove invalid source files (if nonull was set)
+                if (options.ultraVerbose) {
+                    grunt.log.writeln('Current filepath', filepath);
+                }
                 if (!grunt.file.exists(filepath)) {
                     grunt.fail.warn('Source file "' + filepath + '" not found.');
                     return false;
