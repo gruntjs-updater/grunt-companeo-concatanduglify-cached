@@ -20,9 +20,9 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('companeo_concatanduglify_cached', 'Uglify each file only if necessary and concat all after.', function () {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-                separator  : ';',
+                separator: ';',
                 no_compress: true,
-                ultraVerbose : false
+                ultraVerbose: false
             }),
             res;
 
@@ -36,33 +36,39 @@ module.exports = function (grunt) {
         this.files.forEach(function (file) {
             // Concat specified files
 
-            var src = file.orig.src.filter(function (filepath) {
-                // Warn on and remove invalid source files (if nonull was set)
-                if (options.ultraVerbose) {
-                    grunt.log.writeln('Current filepath', filepath);
-                }
-                if (!grunt.file.exists(filepath)) {
-                    grunt.fail.warn('Source file "' + filepath + '" not found.');
-                    return false;
-                } else {
-                    return true;
-                }
-            }).map(function (filepath) {
-                return grunt.file.read(filepath);
-            }).join(grunt.util.normalizelf(options.separator));
+            var src;
 
-            if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
-                grunt.log.writeln('creation', file.dest);
-                grunt.file.write(file.dest + '.js', src);
+            try {
+                src = file.orig.src.filter(function (filepath) {
+                    // Warn on and remove invalid source files (if nonull was set)
+                    if (options.ultraVerbose) {
+                        grunt.log.writeln('Current filepath', filepath);
+                    }
+                    if (!grunt.file.exists(filepath)) {
+                        grunt.fail.warn('Source file "' + filepath + '" not found.');
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }).map(function (filepath) {
+                    return grunt.file.read(filepath);
+                }).join(grunt.util.normalizelf(options.separator));
 
-                if (!options.no_compress) {
-                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
-                    grunt.file.write(file.dest + '.min.js', res.code);
+                if (!grunt.file.exists(file.dest + '.js') || src !== grunt.file.read(file.dest + '.js')) {
+                    grunt.log.writeln('creation', file.dest);
+                    grunt.file.write(file.dest + '.js', src);
+
+                    if (!options.no_compress) {
+                        res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
+                        grunt.file.write(file.dest + '.min.js', res.code);
+                    } else {
+                        grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
+                    }
                 } else {
-                    grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
+                    grunt.log.writeln('rejet', file.dest);
                 }
-            } else {
-                grunt.log.writeln('rejet', file.dest);
+            } catch (eX) {
+                grunt.log.writeln('eX', eX.message, eX.stack, JSON.stringify(eX));
             }
         });
     });
