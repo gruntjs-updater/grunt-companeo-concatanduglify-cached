@@ -65,10 +65,10 @@ module.exports = function (grunt) {
                         grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                     }
                 } else {
-                    grunt.log.writeln('rejet', file.dest);
+                    grunt.log.writeln('rejet (' + !grunt.file.exists(file.dest + '.js') + ', ' + src !== grunt.file.read(file.dest + '.js') + ')', file.dest);
                 }
             } catch (eX) {
-                grunt.log.writeln('eX', eX.message, eX.stack, JSON.stringify(eX));
+                grunt.log.writeln('eXception', eX.message, eX.stack, JSON.stringify(eX));
             }
         });
     });
