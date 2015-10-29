@@ -1,7 +1,7 @@
 {
   "name": "grunt-companeo-concatanduglify-cached",
   "description": "Uglify each file only if necessary and concat all after.",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "homepage": "https://github.com/Companeo/grunt-companeo-concatanduglify-cached",
   "author": {
     "name": "Companeo IT department",
@@ -29,7 +29,7 @@
   "dependencies": {
     "chalk": "0.5.1",
     "lodash": "2.4.1",
-    "uglify-js": "git://github.com/Companeo/UglifyJS.git",
+    "uglify-js": "git://github.com/Companeo/UglifyJS2.git",
     "uri-path": "0.0.2"
   },
   "devDependencies": {
