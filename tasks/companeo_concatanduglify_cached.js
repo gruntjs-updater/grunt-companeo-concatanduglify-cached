@@ -62,7 +62,7 @@ module.exports = function (grunt) {
                     } else {
                         grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                     }
-                    grunt.file.write(file.dest + '.min.js.map', res.map);
+                    //grunt.file.write(file.dest + '.min.js.map', res.map);
                 }
             } catch (eX) {
                 grunt.fail.fatal('eXception', eX.message, eX.stack, JSON.stringify(eX));
