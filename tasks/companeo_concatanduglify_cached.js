@@ -28,10 +28,6 @@ module.exports = function (grunt) {
 
         grunt.log.writeln('Options used : ', JSON.stringify(options, null, 2));
 
-        if (options.ultraVerbose) {
-            grunt.log.writeln('All files concerned', JSON.stringify(this.files));
-        }
-
         // Iterate over all specified file groups.
         this.files.forEach(function (file) {
             // Concat specified files
@@ -45,7 +41,7 @@ module.exports = function (grunt) {
                         grunt.log.writeln('Current filepath', filepath);
                     }
                     if (!grunt.file.exists(filepath)) {
-                        grunt.fail.warn('Source file "' + filepath + '" not found.');
+                        grunt.fail.fatal('Source file "' + filepath + '" not found.');
                         return false;
                     } else {
                         return true;
@@ -58,19 +54,18 @@ module.exports = function (grunt) {
                     grunt.log.writeln('creation', file.dest);
                     grunt.file.write(file.dest + '.js', src);
 
+                    res = uglify.minify(file.dest + '.js', file.dest + '.min.js', {
+                        outSourceMap : file.dest + '.min.js.map'
+                    });
                     if (!options.no_compress) {
-                        res = uglify.minify(file.dest + '.js', file.dest + '.min.js');
                         grunt.file.write(file.dest + '.min.js', res.code);
                     } else {
                         grunt.file.copy(file.dest + '.js', file.dest + '.min.js')
                     }
-                } else {
-                    grunt.log.writeln('rejet ', file.dest);
-                    grunt.log.writeln('cond1 ', !grunt.file.exists(file.dest + '.js'));
-                    grunt.log.writeln('cond2 ', src !== grunt.file.read(file.dest + '.js'));
+                    grunt.file.write(file.dest + '.min.js.map', res.map);
                 }
             } catch (eX) {
-                grunt.log.writeln('eXception', eX.message, eX.stack, JSON.stringify(eX));
+                grunt.fail.fatal('eXception', eX.message, eX.stack, JSON.stringify(eX));
             }
         });
     });
