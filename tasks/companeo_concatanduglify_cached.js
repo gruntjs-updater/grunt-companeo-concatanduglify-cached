@@ -20,7 +20,7 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('companeo_concatanduglify_cached', 'Uglify each file only if necessary and concat all after.', function () {
         // Merge task-specific and/or target-specific options with these defaults.
         var options = this.options({
-                separator: ';',
+                separator: '\n;\n',
                 no_compress: true,
                 ultraVerbose: false
             }),
@@ -65,6 +65,9 @@ module.exports = function (grunt) {
                     //grunt.file.write(file.dest + '.min.js.map', res.map);
                 }
             } catch (eX) {
+                grunt.log.writeln('message', eX.message);
+                grunt.log.writeln('stack', eX.stack);
+                grunt.log.writeln('JSON', JSON.stringify(eX));
                 grunt.fail.fatal('eXception', eX.message, eX.stack, JSON.stringify(eX));
             }
         });
